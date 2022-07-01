@@ -1,9 +1,12 @@
 const express = require('express');
 const router = express.Router();
+const sendMail = require("./../services/sendgrid.service")
 
-
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
+router.post('/', (req, res) => {
+  sendMail("ahmed.sayed.fcis1997@gmail.com")
+  res.send({
+    message: "Okay"
+  })
 });
 
 module.exports = router;
