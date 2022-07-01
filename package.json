@@ -4,11 +4,13 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "dev": "nodemon -r dotenv/config  ./bin/www"
+    "dev": "nodemon -r dotenv/config  ./bin/www",
+    "mail": "node ./scripts/sendMail.script.js"
   },
   "dependencies": {
     "@sendgrid/mail": "^7.7.0",
     "bull": "^4.8.4",
+    "commander": "^9.3.0",
     "debug": "~2.6.9",
     "dotenv": "^16.0.1",
     "express": "~4.16.1",
