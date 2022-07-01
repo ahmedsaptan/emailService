@@ -1,6 +1,9 @@
 const createError = require('http-errors');
 const express = require('express');
 const logger = require('morgan');
+const {  checkEnvVars } = require("./utils");
+
+checkEnvVars();
 
 const app = express();
 
@@ -26,7 +29,7 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.send(error);
+  res.send(err);
 });
 
 module.exports = app;
