@@ -5,6 +5,10 @@ class EmailService {
     this.subject = subject;
     this.text = text;
     this.html = html;
+    this.defaultFromEmail = process.env.SENDING_EMAIL;
+    if (this.defaultFromEmail) {
+      this.from = this.defaultFromEmail;
+    }
   }
 
   setEmailService({ emailService, emailServiceProvider }) {
@@ -13,12 +17,12 @@ class EmailService {
   }
 
   sendEmail() {
-    this.emailService.sendEmail({
+    return this.emailService.sendEmail({
       to: this.to,
       from: this.from,
       subject: this.subject,
-      html: this.html,
       text: this.text,
+      html: this.html,
     });
   }
 }

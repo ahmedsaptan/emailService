@@ -10,38 +10,37 @@ const EmailService = require("./email.service");
 
 emailQueue.process(async (job) => {
   try {
-    debug({ job });
     const data = job.data;
 
-    debug({ data });
+    debug({data})
     const email = new EmailService(data);
-    switch (data.emailServiceProvider) {
-      case EMAIL_SERVICE_PROVIDER.SENDGRID:
-        email.setEmailService({
-          emailService: new SendGridService(),
-          emailServiceProvider: EMAIL_SERVICE_PROVIDER.SENDGRID,
-        });
-        break;
-      case EMAIL_SERVICE_PROVIDER.MAILJET:
-        email.setEmailService({
-          emailService: new MailjetService(),
-          emailServiceProvider: EMAIL_SERVICE_PROVIDER.MAILJET,
-        });
-        break;
-      default:
-        email.setEmailService({
-          emailService: new SendGridService(),
-          emailServiceProvider: EMAIL_SERVICE_PROVIDER.SENDGRID,
-        });
+    if(data.emailServiceProvider === EMAIL_SERVICE_PROVIDER.SENDGRID) {
+      const sgService = new SendGridService();
+      email.setEmailService({
+        emailService: sgService,
+        emailServiceProvider: EMAIL_SERVICE_PROVIDER.SENDGRID,
+      });
+    } else {
+      const mjService = new MailjetService();
+      email.setEmailService({
+        emailService: mjService,
+        emailServiceProvider: EMAIL_SERVICE_PROVIDER.MAILJET,
+      });
     }
 
-    await email.sendEmail(data);
+    await email.sendEmail();
+    debug("sending using: ", job.data.emailServiceProvider)
   } catch (error) {
-    emailQueue.add({
-      ...job.data,
-      emailServiceProvider: EMAIL_SERVICE_PROVIDER.MAILJET,
-    });
-    debug({ error });
+    if(job.data.firstTime) {
+      const data = {
+        ...job.data,
+        emailServiceProvider: EMAIL_SERVICE_PROVIDER.MAILJET,
+        firstTime: false
+      }
+      emailQueue.add(data);
+    }
+  
+    // TODO:
   }
 });
 

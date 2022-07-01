@@ -1,39 +1,40 @@
 const Mailjet = require("node-mailjet");
-
+const debug = require('debug')("mailjet.service");
 const mailjet = new Mailjet({
   apiKey: process.env.MJ_APIKEY_PUBLIC,
   apiSecret: process.env.MJ_APIKEY_PRIVATE,
 });
 
-class MailjetService {
-    sendEmail({ to, from, subject, text, html }) {
+class MailjetService{
+    constructor() {
+    }
+    sendEmail(data) {
     const request = mailjet.post("send", { version: "v3.1" }).request({
       Messages: [
         {
           From: {
-            Email: "ahmed.sayed.fcis1997@gmail.com",
-            Name: "Ahmad",
+            Email: data.from,
+            Name: data.from.split("@")[0],
           },
           To: [
             {
-              Email: "ahmed.sayed.fcis1997@gmail.com",
-              Name: "Ahmad",
+              Email: data.to,
+              Name: data.to.split("@")[0],
             },
           ],
-          Subject: "Greetings from Mailjet.",
-          TextPart: "My first Mailjet email",
-          HTMLPart:
-            "<h3>Dear passenger 1, welcome to <a href='https://www.mailjet.com/'>Mailjet</a>!</h3><br />May the delivery force be with you!",
+          Subject: data.subject,
+          TextPart: data.text,
+          HTMLPart: data.html,
           CustomID: "AppGettingStartedTest",
         },
       ],
     });
-    request
+    return request
       .then((result) => {
-        console.log(result.body);
+        debug(result.body);
       })
       .catch((err) => {
-        console.log(err.statusCode);
+        debug(err.statusCode);
       });
   }
 }
