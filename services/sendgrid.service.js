@@ -9,7 +9,6 @@ class SendGridService  {
   }
   async sendEmail(data) {
     try {
-      throw new Error("fuck")
       const result = await sgMail.send(data);
       debug(result);
       debug({ statusCode: result[0].statusCode });

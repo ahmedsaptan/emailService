@@ -6,7 +6,7 @@
     "start": "node ./bin/www",
     "dev": "nodemon -r dotenv/config  ./bin/www",
     "test": "",
-    "migrate": "npx knex migrate:latest"
+    "migrate": "npx"
   },
   "bin": {
     "mailercli": " ./scripts/sendMail.script.js"

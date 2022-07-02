@@ -1,4 +1,4 @@
-#! /usr/bin/env node
+#!/usr/bin/env node
 
 const axios = require("axios").default;
 const inquirer = require("inquirer");

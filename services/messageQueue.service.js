@@ -49,8 +49,6 @@ emailQueue.process(async (job) => {
         firstTime: false,
       });
     }
-
-    // TODO:
   }
 });
 

@@ -4,10 +4,10 @@ exports.up = function (knex) {
     table.string('from');
     table.string('to');
     table.string('subject');
-    table.string('text');
-    table.string('html');
+    table.string('text', 5000);
+    table.string('html', 5000);
     table.string('provider');
-    table.boolean('send');
+    table.boolean('send').defaultTo(false);
     table
     .dateTime("created_at")
     .notNullable()
