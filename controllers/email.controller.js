@@ -9,10 +9,10 @@ const validateSendingEmail = async (body) => {
     const schema = Joi.object({
       to: Joi.string().email().required(),
       from: Joi.string().email(),
-      subject: Joi.string().min(10).required(),
+      subject: Joi.string().required(),
       text: Joi.string(),
       html: Joi.string(),
-    }).xor('text', 'html')
+    }).or('text', 'html')
    return await schema.validateAsync(body);
   } catch (error) {
     throw createError.UnprocessableEntity(error.message);
