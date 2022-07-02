@@ -43,10 +43,11 @@ inquirer
         if(error?.response?.status === 422) {
             spinner.error({text: error.response.data.message});
         }
-   
+        spinner.error();
     }
   });
 
+  console.log("hello")
 const sendAPiCall = async (data) => {
-  return axios.post(`http://localhost:4444/api/mail`, data);
+  return axios.post(`http://localhost:6868/api/mail`, data);
 };

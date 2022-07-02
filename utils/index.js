@@ -1,6 +1,6 @@
 const { DEBUG_SERVER } = require("../constant");
 const debug = require("debug")(DEBUG_SERVER);
-const vars = ["SENDGRID_API_KEY", "REDIS_URL", "SENDING_EMAIL"];
+const vars = ["SENDGRID_API_KEY", "SENDING_EMAIL"];
 
 
 const checkEnvVars = () => {

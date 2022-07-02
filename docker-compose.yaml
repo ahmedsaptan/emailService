@@ -4,19 +4,45 @@ services:
     image: redis
     restart: always
     ports:
-      - '6379:6379'
+      - '$REDIS_LOCAL_PORT:$REDIS_DOCKER_PORT'
     volumes: 
       - redis:/data
+
+  mysqldb:
+    platform: linux/x86_64
+    image: mysql:5.7
+    restart: unless-stopped
+    env_file: ./.env
+    environment:
+      - MYSQL_ROOT_PASSWORD=$MYSQLDB_ROOT_PASSWORD
+      - MYSQL_DATABASE=$MYSQLDB_DATABASE
+    ports:
+      - $MYSQLDB_LOCAL_PORT:$MYSQLDB_DOCKER_PORT
+    volumes:
+      - db:/var/lib/mysql
+
   # node-app:
   #   depends_on:
   #     - redis
-  #   build: .
+  #     - mysqldb
+  #   build: 
+  #     context: .
+  #   command: npm run dev
+
+  #   restart: always
+  #   env_file: ./.env
   #   ports:
-  #     - "4444:4444"
+  #     - $NODE_LOCAL_PORT:$NODE_DOCKER_PORT
   #   environment:
-  #     NODE_ENV: production
-  #     REDIS_HOST: cache
-  #     REDIS_PORT: 6379
+  #     - NODE_ENV=production
+  #     - REDIS_HOST=cache
+  #     - REDIS_PORT=$REDIS_DOCKER_PORT
+  #     - DB_HOST=mysqldb
+  #     - DB_USER=$MYSQLDB_USER
+  #     - DB_PASSWORD=$MYSQLDB_ROOT_PASSWORD
+  #     - DB_NAME=$MYSQLDB_DATABASE
+  #     - DB_PORT=$MYSQLDB_DOCKER_PORT
 volumes:
   redis:
     driver: local
+  db:

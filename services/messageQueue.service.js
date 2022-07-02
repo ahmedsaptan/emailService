@@ -1,11 +1,11 @@
 const Queue = require("bull");
-const { REDIS_URL } = process.env;
+const { REDIS_HOST, REDIS_PORT } = process.env;
 const { DEBUG_SERVER, EMAIL_SERVICE_PROVIDER } = require("../constant");
 const debug = require("debug")(DEBUG_SERVER);
 const SendGridService = require("./sendgrid.service");
 const MailjetService = require("./mailjet.service");
 
-const emailQueue = new Queue("email sending", REDIS_URL);
+const emailQueue = new Queue("email sending", `${REDIS_HOST}:${REDIS_PORT}`);
 const EmailService = require("./email.service");
 
 emailQueue.process(async (job) => {
