@@ -7,7 +7,7 @@ exports.up = function (knex) {
     table.string('text');
     table.string('html');
     table.string('provider');
-
+    table.boolean('send');
     table
     .dateTime("created_at")
     .notNullable()

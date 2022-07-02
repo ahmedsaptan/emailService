@@ -5,16 +5,17 @@ const debug = require("debug")(DEBUG_SERVER);
 const SendGridService = require("./sendgrid.service");
 const MailjetService = require("./mailjet.service");
 
-const emailQueue = new Queue("email sending", `${REDIS_HOST}:${REDIS_PORT}`);
+const emailQueue = new Queue("email sending", `redis://localhost:6379`);
 const EmailService = require("./email.service");
+const { Email: EmailModel } = require("../data/models");
 
 emailQueue.process(async (job) => {
+  const data = job.data;
+  debug({ data });
+  const emailObj = data.email;
   try {
-    const data = job.data;
-
-    debug({data})
     const email = new EmailService(data);
-    if(data.emailServiceProvider === EMAIL_SERVICE_PROVIDER.SENDGRID) {
+    if (data.emailServiceProvider === EMAIL_SERVICE_PROVIDER.SENDGRID) {
       const sgService = new SendGridService();
       email.setEmailService({
         emailService: sgService,
@@ -29,17 +30,26 @@ emailQueue.process(async (job) => {
     }
 
     await email.sendEmail();
-    debug("sending using: ", job.data.emailServiceProvider)
+    if (emailObj.provider === data.emailServiceProvider) {
+      await EmailModel.query().findById(emailObj.id).patch({
+        send: true,
+      });
+    } else {
+      await EmailModel.query().findById(emailObj.id).patch({
+        send: true,
+        provider: data.emailServiceProvider
+      });
+    }
+   
   } catch (error) {
-    if(job.data.firstTime) {
-      const data = {
+    if (data.firstTime) {
+      emailQueue.add({
         ...job.data,
         emailServiceProvider: EMAIL_SERVICE_PROVIDER.MAILJET,
-        firstTime: false
-      }
-      emailQueue.add(data);
+        firstTime: false,
+      });
     }
-  
+
     // TODO:
   }
 });

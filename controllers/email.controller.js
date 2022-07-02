@@ -24,19 +24,10 @@ const validateSendingEmail = async (body) => {
 const sendEmail = async (req, res, next) => {
   try {
     const data = await validateSendingEmail(req.body);
-    const email = await Email.query().insert({
-      to: "kjh",
-      from :"aldhaf",
-      text: "ksjghf",
-      subject: "jhfg",
-      html: "jhgkhjf",
-      provider: "sjahdgf"
-    })
+    data.provider = EMAIL_SERVICE_PROVIDER.SENDGRID;
+    const email = await Email.query().insertAndFetch(data)
 
-    debug({
-      email
-    })
-    messageQueueService.emailQueue.add({...data, emailServiceProvider: EMAIL_SERVICE_PROVIDER.SENDGRID, firstTime: true });
+    messageQueueService.emailQueue.add({...data, emailServiceProvider: EMAIL_SERVICE_PROVIDER.SENDGRID, firstTime: true, email });
     res.send({ data });
   } catch (error) {
     debug({error})
