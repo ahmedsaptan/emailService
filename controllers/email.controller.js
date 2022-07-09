@@ -28,13 +28,26 @@ const sendEmail = async (req, res, next) => {
     const email = await Email.query().insertAndFetch(data)
 
     messageQueueService.emailQueue.add({...data, emailServiceProvider: EMAIL_SERVICE_PROVIDER.SENDGRID, firstTime: true, email });
-    res.send({ data });
+    res.send({ email });
   } catch (error) {
     debug({error})
     next(error)
   }
 };
 
+
+const getEmails = async (req, res, next) => {
+  try {
+    const emails = await Email.query().orderBy('created_at', 'desc');
+    res.send({ emails });
+  } catch (error) {
+    debug({error})
+    next(error)
+  }
+};
+
+
 module.exports = {
   sendEmail,
+  getEmails
 };

@@ -2,6 +2,6 @@ const express = require('express');
 const router = express.Router();
 
 
-router.use("/mail", require('./mail'))
+router.use("/mails", require('./mail'))
 
 module.exports = router;

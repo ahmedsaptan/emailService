@@ -2,10 +2,7 @@ const createError = require('http-errors');
 const express = require('express');
 const logger = require('morgan');
 const cors = require('cors')
-
-const {  checkEnvVars } = require("./utils");
-
-checkEnvVars();
+require("dotenv").config();
 
 const app = express();
 
