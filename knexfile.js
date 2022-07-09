@@ -15,7 +15,7 @@ module.exports = {
 			database: process.env.DB_NAME || "bonat_db",
 			charset: 'utf8mb4'
 		},
-		debug: true,
+		debug: false,
 		pool,
 		migrations: {
 			directory: "data/migrations",
