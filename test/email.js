@@ -140,22 +140,5 @@ describe("Emails", () => {
       expect(res.body.email.from).to.equal("from@g.com");
     });
 
-    // it('it should return error if not provide to an email', async () => {
-    //   const res = await chai.request(server)
-    //       .post('/api/mails')
-    //       .send()
-    //   expect(res.status).to.equal(422);
-    //   expect(res.body).to.be.an('object');
-    //   expect(res.body.message).to.equal('"to" is required');
-    // });
-
-    // it('it should return error if not provide to an email', async () => {
-    //   const res = await chai.request(server)
-    //       .post('/api/mails')
-    //       .send()
-    //   expect(res.status).to.equal(422);
-    //   expect(res.body).to.be.an('object');
-    //   expect(res.body.message).to.equal('"to" is required');
-    // });
   });
 });
